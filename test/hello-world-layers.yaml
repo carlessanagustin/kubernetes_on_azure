@@ -1,0 +1,129 @@
+# create...
+# $ kubectl apply -f ./nginx.yaml
+#
+# delete...
+# $ kubectl delete -f ./nginx.yaml
+#
+# monitor...
+# $ watch kubectl -n nginx-test get pod,svc,endpoints,ingress,deployments,replicasets
+#
+# troubleshoot service...
+# $ kubectl proxy --port=8001
+# $ curl http://127.0.0.1:8001/api/v1/namespaces/nginx-test/services/nginx-svc:http/proxy/nginx-test
+#
+# troubleshooting ingress...
+# $ export IP=
+# $ export URI=nginx-test
+# $ curl -Ik http://$IP/$URI
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nginx-test
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-dp
+  namespace: nginx-test
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        # nginx | nginxdemos/hello
+        image: nginxdemos/hello
+        ports:
+        - containerPort: 80
+          protocol: TCP
+          name: http
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-svc-l4
+  namespace: nginx-test
+spec:
+  # ClusterIP (http/https) | NodePort | LoadBalancer (tcp/udp) | ExternalName
+  type: LoadBalancer
+  selector:
+    app: nginx
+  ports:
+  - targetPort: 80
+    port: 80  
+    protocol: TCP
+    name: http
+  loadBalancerSourceRanges:
+    - 80.32.145.177/32
+    - 81.44.253.100/32
+    - 88.26.182.126/32
+    - 188.86.156.48/29
+    - 2.139.253.42/32
+    - 212.31.61.206/32
+    - 217.125.111.205/32
+    - 80.25.90.149/32
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-svc-l7
+  namespace: nginx-test
+spec:
+  # ClusterIP (http/https) | NodePort | LoadBalancer (tcp/udp) | ExternalName
+  type: ClusterIP
+  selector:
+    app: nginx
+  ports:
+  - targetPort: 80
+    port: 80  
+    protocol: TCP
+    name: http
+---
+# when service.spec.type == ClusterIP
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: nginx-ingress-l7-external
+  namespace: nginx-test
+  annotations:
+    kubernetes.io/ingress.class: "addon-http-application-routing"
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          servicePort: 80
+          serviceName: nginx-svc-l7
+        path: /nginx-test
+---
+# when service.spec.type == ClusterIP
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: nginx-ingress-l7-internal
+  namespace: nginx-test
+  annotations:
+    kubernetes.io/ingress.class: "internal"
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          servicePort: 80
+          serviceName: nginx-svc-l7
+        path: /nginx-test

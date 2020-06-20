@@ -1,0 +1,63 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dp-sauron2
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: dp-sauron2
+  name: arangodb
+spec:
+  replicas: 1
+  serviceName: arangodb-svc
+  selector:
+    matchLabels:
+      app: arangodb
+  template:
+    metadata:
+      labels:
+        app: arangodb
+    spec:
+      containers:
+      - name: arangodb
+        image: arangodb/arangodb:3.5.3
+        env:
+        - name: ARANGO_ROOT_PASSWORD
+          value: "arango"
+        ports:
+        - containerPort: 8529
+        volumeMounts:
+          - name: arango
+            mountPath: /var/lib/arangodb3
+  volumeClaimTemplates:
+    - metadata:
+        name: arango
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+        storageClassName: default
+        # azurefile         == OK
+        # azurefile-premium == KO
+        # default (default) == OK
+        # managed-premium   == KO 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: dp-sauron2
+  name: arangodb-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: arangodb
+  ports:
+  - name: arangodb
+    protocol: TCP
+    port: 8529  
+    targetPort: 8529
+    

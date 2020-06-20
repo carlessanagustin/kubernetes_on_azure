@@ -1,0 +1,7 @@
+ARCHIVE
+.terraform
+*.pdf
+
+Makefile_secrets.mk
+secrets-stg.sh
+secrets.mk
