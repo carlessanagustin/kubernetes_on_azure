@@ -6,3 +6,5 @@ Makefile_secrets.mk
 secrets-stg.sh
 secrets.mk
 backend.tf
+
+certs
