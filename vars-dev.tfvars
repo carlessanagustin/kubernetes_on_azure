@@ -1,3 +1,5 @@
+office_pip = [""]
+
 project_prefix =  "test-carlesaks"
 project_sufix = "ne-001"
 project_location    = "northeurope"
@@ -8,7 +10,6 @@ project_tags = {
     "Version": "001"
     }
 
-office_pip = [""]
 k8s_ingress_ip = ["10.1.16.5"]
 
 k8s_version = "1.16.9"
@@ -30,3 +31,6 @@ auto_scaler_settings = {
     scale_down_unready               = "20m"
     scale_down_utilization_threshold = 0.5
     }
+
+ssl_certificate_file        = "./certs/appgwcert.pfx"
+#ssl_certificate_password    = 
