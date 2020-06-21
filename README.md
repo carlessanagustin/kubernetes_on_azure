@@ -9,6 +9,10 @@
 * jq
 * az CLI
 
+## Architecture
+
+![./aks_architecture.png](./aks_architecture.png)
+
 ## Deployment instructions
 
 * **IMPORTANT**: Remember to change Terraform State remote location from `./terraform/backend.tf`
