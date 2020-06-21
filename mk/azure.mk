@@ -1,7 +1,6 @@
 project_prefix ?= test-carlesaks
 AKS_RG ?= ${project_prefix}-rg
 AKS_NAME ?= ${project_prefix}-k8s
-
 aks_credentials:
 	az aks get-credentials --overwrite-existing \
 	--subscription ${ARM_SUBSCRIPTION_ID} \
@@ -13,7 +12,7 @@ aks_credentials:
 # https://docs.microsoft.com/en-us/azure/application-gateway/redirect-http-to-https-cli#create-a-self-signed-certificate
 CERTDIR=./certs
 CERTNAME=appgwcert
-PASSWD=Shebai5oyav9eheghoowie4ah
+PASSWD ?= Shebai5oyav9eheghoowie4ah
 DAYS=3650
 Country_Name=ES
 State_Name=Catalunya

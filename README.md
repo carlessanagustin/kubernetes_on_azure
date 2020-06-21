@@ -58,6 +58,9 @@
 ./ $ make tf_apply
 ```
 
+## Test
+
+Go to [test folder](./test/)
 
 ## Other commands
 

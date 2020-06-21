@@ -18,7 +18,7 @@ tf_plan:
 	cd ${TF_DIR} && terraform plan ${TFVARS}
 
 tf_apply:
-	cd ${TF_DIR} && terraform apply ${TFVARS}${TFYES}
+	cd ${TF_DIR} && terraform apply ${TFVARS} ${TFYES}
 
 tf_destroy:
 	cd ${TF_DIR} && terraform destroy ${TFVARS}
