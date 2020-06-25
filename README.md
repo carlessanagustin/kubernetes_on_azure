@@ -31,12 +31,6 @@
 ./ $ make tf_apply
 ```
 
-* Gain new AKS credentials for CLI
-
-```shell
-./ $ make aks_credentials
-```
-
 ### 2. Setup custom internal NGINX ingress controller
 
 * Create custom NGINX ingress controller by running:
@@ -45,10 +39,10 @@
 ./ $ make ingress_nginx
 ```
 
-* Change `./vars-${TF_WS}.tfvars` by running:
+* *(optional)* Change `./vars-${TF_WS}.tfvars` by running:
 
 ```shell
-./ $ make change_nginx_ingress_ip
+# (optional) ./ $ make change_nginx_ingress_ip
 ```
 
 * Apply changes by running:
@@ -67,5 +61,11 @@ Go to [test folder](./test/)
 * Get appgw public ip
 
 ```shell
-./ $ make show_appgw_ip
+./ $ make show_ip_appgw
+```
+
+* Gain new AKS credentials for CLI
+
+```shell
+./ $ make aks_credentials
 ```
