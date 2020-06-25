@@ -37,7 +37,7 @@ ingress_nginx: aks_credentials helm_nginx_ns helm_nginx_repo helm_nginx_install 
 
 # Get nginx ingress controller public ip
 TF_VAR_k8s_ingress_ip = $(shell kubectl -n ingress-internal get service nginx-ingress-controller -o json | jq '.status.loadBalancer.ingress[0].ip' | sed 's|^|[|' | sed 's|$$|]|' )
-show_nginx_ingress_ip:
+show_ip_nginx_ingress:
 	@echo ">> nginx_ingress_ip = tf.var.k8s_ingress_ip: "
 	@echo ${TF_VAR_k8s_ingress_ip}
 

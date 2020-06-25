@@ -18,3 +18,6 @@ AKS_NAME=${project_prefix}-k8s
 OFFICE_PIP := $(shell curl -s https://checkip.amazonaws.com)
 whatismyip:
 	@echo ${OFFICE_PIP}
+
+
+show_pips: show_ip_nginx_ingress show_ip_appgw

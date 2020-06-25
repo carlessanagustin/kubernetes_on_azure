@@ -1,3 +1,4 @@
+## Update Kubernetes credentials
 project_prefix ?= test-carles-koa
 AKS_RG ?= ${project_prefix}-rg
 AKS_NAME ?= ${project_prefix}-k8s
@@ -8,8 +9,16 @@ aks_credentials:
 	--name ${AKS_NAME}
 	#@watch kubectl get nodes
 
+## Get Azure Application Gateway public ip
+show_ip_appgw:
+	@echo ">> appgw_ip: "
+	@az network public-ip show \
+	--name ${project_prefix}-appgw-pip \
+	--resource-group ${AKS_RG} \
+	--subscription ${ARM_SUBSCRIPTION_ID} \
+	| jq '.ipAddress' | tr -d '"'
 
-# https://docs.microsoft.com/en-us/azure/application-gateway/redirect-http-to-https-cli#create-a-self-signed-certificate
+## Create self-signed TLS/SSL certificates for Application Gateway
 CERTDIR=./certs
 CERTNAME=appgwcert
 PASSWD ?= Shebai5oyav9eheghoowie4ah
@@ -28,3 +37,4 @@ appgw_cert:
 	  -password pass:${PASSWD} \
 	  -out ${CERTDIR}/${CERTNAME}.pfx -inkey ${CERTDIR}/${CERTNAME}.key -in ${CERTDIR}/${CERTNAME}.crt
 	echo "application gateway certificate: ${CERTDIR}/${CERTNAME}.pfx"
+# docs: https://docs.microsoft.com/en-us/azure/application-gateway/redirect-http-to-https-cli#create-a-self-signed-certificate

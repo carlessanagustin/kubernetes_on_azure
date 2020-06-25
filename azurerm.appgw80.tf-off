@@ -1,6 +1,6 @@
 variable "k8s_ingress_ip" {
   default     = ["10.1.16.5"]
-  description = "get IP via command = make show_nginx_ingress_ip"
+  description = "get IP via command = make show_ip_nginx_ingress"
 }
 
 

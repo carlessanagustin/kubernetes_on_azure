@@ -1,14 +1,4 @@
-# Get Azure Application Gateway public ip
-show_appgw_ip:
-	@echo ">> appgw_ip: "
-	@az network public-ip show \
-	--name ${project_prefix}-appgw-pip \
-	--resource-group ${AKS_RG} \
-	--subscription ${ARM_SUBSCRIPTION_ID} \
-	| jq '.ipAddress' | tr -d '"'
-
-show_pips: show_nginx_ingress_ip show_appgw_ip
-
+# TODO
 
 # output: aks_node_resource_group = 
 TF_VAR_aks_node_resource_group = $(shell az aks show --name ${project_prefix}-k8s --resource-group ${AKS_RG} --subscription ${ARM_SUBSCRIPTION_ID} | jq '.nodeResourceGroup')
