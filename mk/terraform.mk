@@ -5,14 +5,14 @@ TFVARS ?= -var-file=./vars-${TF_WS}.tfvars
 
 tf_start: tf_init tf_create  
 
+tf_init:
+	cd ${TF_DIR} && terraform init
+
 tf_create:
 	cd ${TF_DIR} && terraform workspace new ${TF_WS}
 
 tf_cleanup:
-	cd ${TF_DIR} && terraform workspace select default && terraform workspace delete -force ${TF_WS}
-
-tf_init:
-	cd ${TF_DIR} && terraform init
+	cd ${TF_DIR} && terraform workspace select default && terraform workspace delete -force ${TF_WS} && rm -Rf .terraform
 
 tf_plan:
 	cd ${TF_DIR} && terraform plan ${TFVARS}

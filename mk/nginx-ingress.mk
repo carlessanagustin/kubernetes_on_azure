@@ -32,7 +32,7 @@ helm_nginx_uninstall:
 helm_nginx_ingress_test:
 	watch kubectl get service -l app=nginx-ingress --namespace ingress-internal
 
-ingress_nginx: helm_nginx_ns helm_nginx_repo helm_nginx_install helm_nginx_ingress_test
+ingress_nginx: aks_credentials helm_nginx_ns helm_nginx_repo helm_nginx_install helm_nginx_ingress_test
 
 
 # Get nginx ingress controller public ip
