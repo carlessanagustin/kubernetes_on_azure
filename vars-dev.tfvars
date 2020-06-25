@@ -1,6 +1,9 @@
 office_pip = [""]
 
-project_prefix =  "test-carlesaks"
+ssl_certificate_file        = "./certs/appgwcert.pfx"
+ssl_certificate_password    = "Shebai5oyav9eheghoowie4ah"
+
+project_prefix =  "test-carles-koa"
 project_sufix = "ne-001"
 project_location    = "northeurope"
 project_tags = {
@@ -31,6 +34,3 @@ auto_scaler_settings = {
     scale_down_unready               = "20m"
     scale_down_utilization_threshold = 0.5
     }
-
-ssl_certificate_file        = "./certs/appgwcert.pfx"
-#ssl_certificate_password    = 
