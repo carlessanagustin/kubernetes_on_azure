@@ -30,56 +30,56 @@ resource "azurerm_application_gateway" "appgw" {
   }
 
   frontend_port {
-    name              = "${var.project_prefix}-https"
+    name              = "https-port"
     port              = 443
   }
 
   frontend_port {
-    name              = "${var.project_prefix}-http"
+    name              = "http-port"
     port              = 80
   }
 
   frontend_ip_configuration {
-    name                 = "${var.project_prefix}-feip"
+    name                 = "feip"
     public_ip_address_id = azurerm_public_ip.appgw-pip.id
   }
 
 #####
   http_listener {
-    name                           = "${var.project_prefix}-httplstn1"
-    frontend_ip_configuration_name = "${var.project_prefix}-feip"
-    frontend_port_name             = "${var.project_prefix}-http"
-    protocol                       = "Http"
+    name                                = "http-listener"
+    frontend_ip_configuration_name      = "feip"
+    frontend_port_name                  = "http-port"
+    protocol                            = "Http"
   }
 
   request_routing_rule {
-    name                       = "${var.project_prefix}-rule1"
-    rule_type                  = "Basic"
-    http_listener_name         = "${var.project_prefix}-httplstn1"
-    backend_address_pool_name  = "${var.project_prefix}-bepool1"
-    backend_http_settings_name = "${var.project_prefix}-httpsetting1"
+    name                                = "http-rule"
+    rule_type                           = "Basic"
+    http_listener_name                  = "http-listener"
+    backend_address_pool_name           = "be-pool-01"
+    backend_http_settings_name          = "http-settings"
+  }
+
+  backend_address_pool {
+    name                                = "be-pool-01"
+    # fqdns                          = [azurerm_kubernetes_cluster.k8s.fqdn]
+    # @./terraform/vars.tf
+    ip_addresses                        = var.k8s_ingress_ip
   }
 
   backend_http_settings {
-    name                                = "${var.project_prefix}-httpsetting1"
+    name                                = "http-settings"
     cookie_based_affinity               = "Disabled"
     port                                = 80
     protocol                            = "Http"
     request_timeout                     = 20
-    probe_name                          = "probe"
-    # host_name                           = ""
+    probe_name                          = "http-probe"    
     pick_host_name_from_backend_address = true
-  }
-
-  backend_address_pool {
-    name                  = "${var.project_prefix}-bepool1"
-    # fqdns                 = [azurerm_kubernetes_cluster.k8s.fqdn]
-    # @./terraform/vars.tf
-    ip_addresses          = var.k8s_ingress_ip
+    # host_name                           = ""
   }
 
   probe {
-    name                                      = "probe"
+    name                                      = "http-probe"
     protocol                                  = "http"
     path                                      = "/"
     # host                                      = ""
